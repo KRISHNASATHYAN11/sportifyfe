@@ -90,9 +90,82 @@
 }
 
 
+.login-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+.login-left {
+  flex: 1.3;
+  background:black; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 
 
 
+.login-right {
+  flex: 1;
+  background: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #333;
+}
+
+.login-right h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.login-right p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-form .forgot {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #444;
+  text-decoration: none;
+}
 
 
+.or-separator {
+  text-align: center;
+  margin: 15px 0;
+  color: #777;
+}
+
+.or-separator span {
+  background: white;
+  padding: 0 8px;
+}
+
+
+[class^="number-slide"],
+[class*=" number-slide"] {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  color: #fff;
+  font-weight: 500;
+  height: 300px;
+  max-height: 100vh;
+}

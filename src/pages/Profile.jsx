@@ -1,8 +1,8 @@
 import React from "react";
-
 import { Card } from "flowbite-react";
 import Sidebar from "../components/Sidebar";
 import MobileSideBar from "../components/MobileSideBar";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   return (
@@ -25,7 +25,7 @@ const Profile = () => {
                   <div className="flex flex-col md:flex-row items-center md:items-center gap-4 text-white">
                     <h2 className="text-2xl font-semibold">your_username</h2>
                     <button className="px-4 py-1 bg-green-500 border-transparent rounded-pill hover:bg-green-700 text-sm">
-                      Edit Profile
+                      <Link className="text-white text-decoration-none" to={'/editprofile'}>Edit Profile</Link>
                     </button>
                   </div>
 

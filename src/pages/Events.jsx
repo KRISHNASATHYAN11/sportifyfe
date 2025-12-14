@@ -164,7 +164,7 @@ const Events = () => {
           </div>
         </div>
         <div className="flex justify-center items-center">
-         <button className="bg-green-700 rounded-2xl p-2 px-3 border-transparent rounded-pill text-white mb-5 ">View More...</button>
+         <button className="mt-3 px-4 py-1 rounded-full text-sm font-semibold border border-[#2CFF05] bg-[#2CFF05] hover:shadow-[0_0_10px_#2CFF05] transition hover:bg-black hover:text-white rounded-pill ">View More...</button>
         </div>
       
       </div>

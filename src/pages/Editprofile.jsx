@@ -3,16 +3,19 @@ import React from "react";
 const Editprofile = () => {
   return (
     <>
-      <div
-        data-aos="fade-up"
-        data-aos-duration="3000"
-        className="mx-auto max-w-1/2 min-h-screen mt-3"
-      >
+      <div className="mx-auto max-w-1/2 ">
         <h2 className="text-center mb-6">Edit Profile</h2>
         <div className="bg-white shadow-lg rounded-xl p-6 space-y-5">
           <div>
             <input
               placeholder="Name"
+              className="w-full border p-2 rounded"
+              type="text"
+            />
+          </div>
+          <div>
+            <input
+              placeholder="Bio"
               className="w-full border p-2 rounded"
               type="text"
             />

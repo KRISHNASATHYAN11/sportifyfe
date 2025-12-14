@@ -22,7 +22,7 @@ const Header = () => {
               
               navbarScroll
             >
-              <Nav.Link href="/" className="text-white me-2">
+              <Nav.Link href="/" className="text-white me-2 ">
                 Home
               </Nav.Link>
               <Nav.Link href="/turf" className="text-white mx-3">
@@ -47,7 +47,7 @@ const Header = () => {
                 rounded
               /></Link>
 
-              <button className=" text-white bg-linear-to-r from-lime-200 via-lime-400 to-lime-500  border-transparent px-4 py-1 mx-5 rounded-pill d-none d-lg-flex "><span className="font-bold py-2">Login</span></button>
+              <button className=" bg-linear-to-r from-lime-200 via-lime-400 to-lime-500  border-transparent px-4 py-1 mx-5 rounded-pill d-none d-lg-flex "><span className="font-bold py-2"><Link className="text-white text-decoration-none" to={'/login'}>Login</Link></span></button>
 
 
             </div>

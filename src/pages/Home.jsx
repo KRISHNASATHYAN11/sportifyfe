@@ -10,11 +10,13 @@ import icon1 from "../assets/icon1.png";
 import targeticon from "../assets/targeticon.png";
 import msgicon from "../assets/msgicon.png";
 import lockicon from "../assets/lockicon.png";
-import { MdOutlineSportsBasketball } from "react-icons/md";
+
 import { FaAngleDoubleDown } from "react-icons/fa";
 import { Avatar } from "flowbite-react";
 import mobile from "../assets/mobile.png";
 import Footer from "../components/Footer";
+import Slider from "../components/Slider";
+
 
 
 
@@ -421,21 +423,9 @@ const Home = () => {
             </div>
           </div>
         </div>
-
-        <section class="mt-7 p-5">
-          <div
-            data-aos="fade-up"
-            data-aos-delay="450"
-            data-aos-duration="700"
-            className="flex justify-center md:px-20 px-10 font-bold leading-9 md:text-2xl text-xl mb-5 aos-init aos-animate"
-          >
-            <MdOutlineSportsBasketball
-              className="animate-bounce"
-              size={30}
-              style={{ color: "green" }}
-            />
-            <h5 className="text-white "> Popular Sports</h5>
-          </div>
+{/* popular sports */}
+        {/* <section class="mt-7 p-5">
+          
           <div class=" container grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5  gap-4">
             <div
               className="aos-init aos-animate "
@@ -443,11 +433,7 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <img
-                className="rounded-2xl  w-100"
-                src="https://media.istockphoto.com/id/1336646871/photo/teenagers-practicing-soccer-in-sports-field.jpg?s=612x612&w=0&k=20&c=rFQShDrheD1dCvodjP2gk0eU_YaMaB6I8VNr86uuGx8="
-                alt=""
-              />
+            
             </div>
             <div
               className="aos-init aos-animate"
@@ -455,11 +441,7 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <img
-                className="rounded-2xl w-100"
-                src="https://gameonturf.co.nz/wp-content/uploads/2025/06/Featured-Image.webp"
-                alt=""
-              />
+             
             </div>
 
             <div
@@ -468,11 +450,7 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <img
-                className="rounded-2xl shadow-2xl w-100"
-                src="https://media.istockphoto.com/id/691338554/photo/two-couples-playing-badminton.jpg?s=612x612&w=0&k=20&c=3y0Fhwq_fpyBAVZcVBjOqKO6C7nN8yAtAKLabk6KAfk="
-                alt=""
-              />
+             
             </div>
 
             <div
@@ -481,11 +459,7 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <img
-                className="rounded-2xl shadow-2xl w-100"
-                src="https://www.courtsoftheworld.com/upload/courts/34051/0/COTW-dda-siri-fort-sports-complex-basketball-court-1593434881.webp"
-                alt=""
-              />
+             
             </div>
             <div
               className="aos-init aos-animate"
@@ -493,14 +467,11 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <img
-                className="rounded-2xl shadow-2xl w-100"
-                src="https://media.istockphoto.com/id/2121085620/photo/badminton-sport.jpg?s=612x612&w=0&k=20&c=uHy8wwxRoehJHNemHXozRTATg7CSWYGajFSYP0DPc8s="
-                alt=""
-              />
+              
             </div>
           </div>
-        </section>
+        </section> */}
+        <Slider/>
 
         <div className="container rounded-2xl bg-green-400 mt-3">
           <div className="row ">

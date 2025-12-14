@@ -25,6 +25,7 @@
     "font-awesome": "^4.7.0",
     "framer-motion": "^12.23.25",
     "gsap": "^3.13.0",
+    "keen-slider": "^6.8.6",
     "react": "^19.2.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.0",

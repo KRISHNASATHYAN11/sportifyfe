@@ -56,8 +56,8 @@ const About = () => {
 
         <div className="container-fluid">
           <div id="bg1">
-            <div className="row">
-              <div className="col-12 flex text-center justify-center">
+            <div  className="row">
+              <div data-aos="fade-up" className="col-12 flex text-center justify-center">
                 <p className="p-20 font-bold text-7xl text-orange-100">We’re commited to fostering a safe and supportive community for <span className="text-green-300">Sports lovers.</span></p>
               </div>
 
