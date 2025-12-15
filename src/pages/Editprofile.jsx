@@ -1,107 +1,123 @@
 import React from "react";
+import Sidebar from "../components/Sidebar";
+import MobileSideBar from "../components/MobileSideBar";
 
 const Editprofile = () => {
   return (
-    <>
-      <div className="mx-auto max-w-1/2 ">
-        <h2 className="text-center mb-6">Edit Profile</h2>
-        <div className="bg-white shadow-lg rounded-xl p-6 space-y-5">
-          <div>
-            <input
-              placeholder="Name"
-              className="w-full border p-2 rounded"
-              type="text"
-            />
-          </div>
-          <div>
-            <input
-              placeholder="Bio"
-              className="w-full border p-2 rounded"
-              type="text"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <select className="w-full border p-2 rounded" name="" id="">
-                <option value="">Striker</option>
-                <option value="">Defender</option>
-                <option value="">GoalKeeper</option>
-                <option value="">Midfielder</option>
-              </select>
+    <div className="min-h-screen bg-gray-900">
+
+      {/* Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr]">
+
+        {/* Desktop Sidebar */}
+        <div className="hidden lg:block">
+          <Sidebar />
+        </div>
+
+        {/* Main Content */}
+        <div className="flex items-center justify-center px-4 sm:px-6 lg:px-10 py-8">
+
+          <div className="w-full max-w-xl bg-gray-800 rounded-2xl shadow-lg p-6 sm:p-8">
+
+            {/* Title */}
+            <h2 className="text-2xl font-bold text-white text-center mb-8">
+              Edit Profile
+            </h2>
+
+            {/* Profile Image */}
+            <div className="flex justify-center mb-8">
+              <img
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"
+                alt="profile"
+                className="w-24 h-24 rounded-full object-cover border-4 border-green-500"
+              />
             </div>
 
-            <div>
+            {/* Form */}
+            <div className="space-y-5">
+
               <input
-                className="w-full border p-2 rounded"
-                placeholder="Enter Location"
                 type="text"
+                placeholder="Full Name"
+                className="w-full bg-transparent border border-gray-600 text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none mt-3"
               />
-            </div>
-          </div>
 
-          <div>
-            <input
-              className="w-full border p-2 rounded"
-              placeholder="skills"
-              type="text"
-            />
-          </div>
+              <textarea
+                rows="2"
+                placeholder="Bio"
+                className="w-full bg-transparent border border-gray-600 text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none mt-3"
+              />
 
-          <div>
-            <select className="w-full border p-2 rounded" name="" id="">
-              <option value="">Beginner</option>
-              <option value="">Intermediate</option>
-              <option value="">Advanced</option>
-            </select>
-          </div>
+              {/* Position & Location */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <select className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-400 outline-none mt-3">
+                  <option value="">Select Position</option>
+                  <option>Striker</option>
+                  <option>Midfielder</option>
+                  <option>Defender</option>
+                  <option>Goalkeeper</option>
+                </select>
 
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="block mb-1 font-medium">Goals</label>
+                <input
+                  type="text"
+                  placeholder="Location"
+                  className="bg-transparent border border-gray-600 text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none mt-3"
+                />
+              </div>
+
               <input
-                className="w-full border p-2 rounded"
-                type="number"
-                placeholder="0"
+                type="text"
+                placeholder="Skills (eg: Dribbling, Passing)"
+                className="w-full bg-transparent border border-gray-600 text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none"
               />
-            </div>
 
-            <div>
-              <label className="block mb-1 font-medium">Assists</label>
-              <input
-                className="w-full border p-2 rounded"
-                type="number"
-                placeholder="0"
-              />
-            </div>
+              <select className="w-full bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-400 outline-none mt-3">
+                <option value="">Skill Level</option>
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+              </select>
 
-            <div>
-              <label className="block mb-1 font-medium">Matches</label>
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-3 mt-3">
+                <input
+                  type="number"
+                  placeholder="Goals"
+                  className="bg-transparent border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-400 outline-none"
+                />
+                <input
+                  type="number"
+                  placeholder="Assists"
+                  className="bg-transparent border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-400 outline-none"
+                />
+                <input
+                  type="number"
+                  placeholder="Matches"
+                  className="bg-transparent border border-gray-600 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-400 outline-none"
+                />
+              </div>
+
               <input
-                className="w-full border p-2 rounded"
-                type="number"
-                placeholder="0"
+                type="text"
+                placeholder="Experience (Optional)"
+                className="w-full bg-transparent border border-gray-600 text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none"
               />
+
+              <button className="w-full bg-linear-to-r from-green-400 to-green-600 text-white font-semibold py-3 rounded-pill hover:opacity-90 transition mt-3">
+                Save Changes
+              </button>
+
             </div>
           </div>
-
-          <div>
-            <label className="block mb-1 font-medium">Experience</label>
-            <input
-              className="w-full border p-2 rounded"
-              type="text"
-              placeholder="XYZ Football Club (Optional)"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-linear-to-r from-blue-500 to-green-500 text-white font-semibold py-2 rounded-lg"
-          >
-            Save Changes
-          </button>
         </div>
       </div>
-    </>
+
+      {/* Mobile Sidebar */}
+      <div className="lg:hidden">
+        <MobileSideBar />
+      </div>
+
+    </div>
   );
 };
 

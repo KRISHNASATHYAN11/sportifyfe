@@ -15,7 +15,7 @@ const Header = () => {
           <Navbar.Brand>
             <img style={{width:"90px"}} className=" mx-5" src={sportify_logo} alt="" />
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarScroll" style={{color:"white",backgroundColor:"white"}} />
+          <Navbar.Toggle aria-controls="navbarScroll"  />
           <Navbar.Collapse id="navbarScroll" >
             <Nav
               className="me-auto  my-lg-0  "

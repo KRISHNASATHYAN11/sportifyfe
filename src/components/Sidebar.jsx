@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 const Sidebar = () => {
   return (
     <>
-      <div class="hidden md:flex flex-col w-60  bg-gray-800 p-5 gap-6 fixed left-0 top-0 h-full">
+      <div class="hidden md:flex  flex-col  bg-gray-800 p-5 gap-6 fixed left-0 top-0 h-full">
         <h1 class="text-2xl font-bold text-white">Logo</h1>
 
         <ul class="flex flex-col gap-5 text-lg ">
