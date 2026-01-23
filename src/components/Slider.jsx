@@ -4,7 +4,7 @@ import "keen-slider/keen-slider.min.css";
 import { MdOutlineSportsBasketball } from "react-icons/md";
 
 
-const animation = { duration: 5000, easing: (t) => t };
+const animation = { duration: 10000, easing: (t) => t };
 
 const Slider = () => {
   const [sliderRef] = useKeenSlider({

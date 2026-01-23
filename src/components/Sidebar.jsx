@@ -14,19 +14,19 @@ import { Link } from "react-router-dom";
 const Sidebar = () => {
   return (
     <>
-      <div class="hidden md:flex  flex-col  bg-gray-800 p-5 gap-6 fixed left-0 top-0 h-full">
-        <h1 class="text-2xl font-bold text-white">Logo</h1>
+      <div className="hidden md:flex  flex-col  bg-black rounded-2xl p-4 gap-6 fixed left-0 top-0 h-full">
+        <h4 className=" font-bold text-center text-white fntstyle">  Sportify</h4>
 
-        <ul class="flex flex-col gap-5 text-lg ">
-          <li class="flex items-center gap-3 cursor-pointer text-white">
+        <ul className="flex flex-col gap-5 text-lg ">
+          <li className="flex items-center gap-3 cursor-pointer text-white hover:bg-lime-500 px-2 py-2 rounded-2xl">
             <span>
               <FontAwesomeIcon icon={faHomeUser} />
             </span>
-            <Link className="text-decoration-none text-white" to={"/"}>
+            <Link className="text-decoration-none text-white " to={"/"}>
               Home
             </Link>
           </li>
-          <li class="flex items-center gap-3 cursor-pointer  text-white">
+          <li className="flex items-center gap-3 cursor-pointer  text-white  hover:bg-lime-500 px-2 py-2 rounded-2xl">
             <span>
               <FontAwesomeIcon icon={faSearch} />
             </span>{" "}
@@ -34,7 +34,7 @@ const Sidebar = () => {
               Search
             </Link>
           </li>
-          <li class="flex items-center gap-3 cursor-pointer  text-white">
+          <li className="flex items-center gap-3 cursor-pointer  text-white  hover:bg-lime-500 px-2 py-2 rounded-2xl">
             <span>
               <FontAwesomeIcon icon={faPlus} />
             </span>{" "}
@@ -42,7 +42,7 @@ const Sidebar = () => {
               Create
             </Link>
           </li>
-          <li class="flex items-center gap-3 cursor-pointer  text-white">
+          <li className="flex items-center gap-3 cursor-pointer  text-white  hover:bg-lime-500 px-2 py-2 rounded-2xl">
             <span>
               <FontAwesomeIcon icon={faHeart} />
             </span>{" "}
@@ -50,7 +50,7 @@ const Sidebar = () => {
               Notifications
             </Link>
           </li>
-          <li class="flex items-center gap-3 cursor-pointer  text-white">
+          <li className="flex items-center gap-3 cursor-pointer  text-white  hover:bg-lime-500 px-2 py-2 rounded-2xl">
             <span>
               <FontAwesomeIcon icon={faUser} />
             </span>{" "}
@@ -58,7 +58,7 @@ const Sidebar = () => {
               Profile
             </Link>
           </li>
-          <li class="flex items-center gap-3 cursor-pointer  text-white">
+          <li className="flex items-center gap-3 cursor-pointer  text-white  hover:bg-lime-500 px-2 py-2 rounded-2xl">
             <span>
               <FontAwesomeIcon icon={faUserGroup} />
             </span>{" "}

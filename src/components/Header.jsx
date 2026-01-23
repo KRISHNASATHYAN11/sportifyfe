@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -6,22 +6,39 @@ import sportify_logo from "../assets/sportify_logo.png";
 import { Avatar } from "flowbite-react";
 import { Button } from "flowbite-react";
 import { Link } from "react-router-dom";
+import { Dropdown, DropdownItem } from "flowbite-react";
+import { FaFacebookF } from "react-icons/fa";
+import { BsTwitterX } from "react-icons/bs";
+import { FiInstagram } from "react-icons/fi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOut, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    let tkn = localStorage.getItem("token");
+    if (tkn) {
+      setToken(tkn);
+    }
+    // if token value change, call this function
+  }, [token]);
+
   return (
     <>
       <Navbar expand="lg" className="bg-black">
         <Container fluid>
           <Navbar.Brand>
-            <img style={{width:"90px"}} className=" mx-5" src={sportify_logo} alt="" />
+            <img
+              style={{ width: "90px" }}
+              className=" mx-5"
+              src={sportify_logo}
+              alt=""
+            />
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarScroll"  />
-          <Navbar.Collapse id="navbarScroll" >
-            <Nav
-              className="me-auto  my-lg-0  "
-              
-              navbarScroll
-            >
+          <Navbar.Toggle aria-controls="navbarScroll" />
+          <Navbar.Collapse id="navbarScroll">
+            <Nav className="me-auto  my-lg-0  " navbarScroll>
               <Nav.Link href="/" className="text-white me-2 ">
                 Home
               </Nav.Link>
@@ -40,16 +57,51 @@ const Header = () => {
               </Nav.Link>
             </Nav>
 
-            <div className="d-lg-flex   d-none ">
-            <Link to={'/profile'} >  <Avatar  style={{width:"50px",borderRadius:"50%"}}
-                img="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
-                alt="avatar of Jese"
-                rounded
-              /></Link>
+            <div className="text-white  me-4 flex items-center bg-black ">
+              <FaFacebookF className="mx-2 " />
+              <FiInstagram className="mx-2" />
+              <BsTwitterX className="mx-2" />
+            </div>
 
-              <button className=" bg-linear-to-r from-lime-200 via-lime-400 to-lime-500  border-transparent px-4 py-1 mx-5 rounded-pill d-none d-lg-flex "><span className="font-bold py-2"><Link className="text-white text-decoration-none" to={'/login'}>Login</Link></span></button>
-
-
+            <div>
+              {token ? (
+                <Dropdown
+                  className="bg-black"
+                  label={
+                    <div className="flex">
+                      <Link to={"/profile"}>
+                        <Avatar
+                          style={{ width: "50px", borderRadius: "50%" }}
+                          img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrWl3NFJnWwwjlBSSbNxJcQ2EpYbFhtX4M0Q&s"
+                          alt="avatar of Jese"
+                          rounded
+                        />
+                      </Link>
+                    </div>
+                  }
+                  dismissOnClick={false}
+                >
+                  <div className="bg-black">
+                    <DropdownItem>
+                      <Link className="text-decoration-none text-white ">
+                        Profile
+                        <FontAwesomeIcon icon={faUserEdit} />
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem className="text-white">
+                      <Link className="text-decoration-none text-white">
+                        LogOut <FontAwesomeIcon icon={faSignOut} />
+                      </Link>
+                    </DropdownItem>
+                  </div>
+                </Dropdown>
+              ) : (
+                <Link className="text-white text-decoration-none" to={"/login"}>
+                  <button className=" bg-linear-to-r from-lime-200 via-lime-400 to-lime-500  border-transparent px-4 py-1 mx-5 rounded-pill d-none d-lg-flex ">
+                    Login
+                  </button>
+                </Link>
+              )}
             </div>
           </Navbar.Collapse>
         </Container>

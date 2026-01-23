@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import LiquidEther from "../components/LiquidEther";
 import { Link } from "react-router-dom";
@@ -10,22 +10,64 @@ import icon1 from "../assets/icon1.png";
 import targeticon from "../assets/targeticon.png";
 import msgicon from "../assets/msgicon.png";
 import lockicon from "../assets/lockicon.png";
-
 import { FaAngleDoubleDown } from "react-icons/fa";
 import { Avatar } from "flowbite-react";
 import mobile from "../assets/mobile.png";
 import Footer from "../components/Footer";
 import Slider from "../components/Slider";
-
-
-
-
+import { motion } from "framer-motion";
+import { getLimitedEvents, getLimitedTurfs } from "../services/AllApi";
+import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocation } from "@fortawesome/free-solid-svg-icons";
+import { Badge } from "flowbite-react";
+import { BaseUrl } from "../services/BaseURL";
+import TestimonialSlider from "./TestimonialSlider";
 const Home = () => {
+  const [homeTurfs, setHometurfs] = useState([]);
+
+  const [homeEvents, setHomeEvents] = useState([]);
+
+  useEffect(() => {
+    getHomeTurfs();
+    getHomeEvents();
+  }, []);
+
+  const getHomeTurfs = async () => {
+    try {
+      let apiResponse = await getLimitedTurfs();
+      if (apiResponse.status == 200) {
+        setHometurfs(apiResponse.data.limitedTurfs);
+        console.log(apiResponse.data.limitedTurfs);
+      } else {
+        toast.error(apiResponse.response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error getting Home turfs");
+    }
+  };
+
+  const getHomeEvents = async () => {
+    try {
+      let apiResponse = await getLimitedEvents();
+      if (apiResponse.status == 200) {
+        setHomeEvents(apiResponse.data.limitedEvents);
+        console.log(apiResponse.data.limitedEvents);
+      } else {
+        toast.error(apiResponse.response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error getting Home turfs");
+    }
+  };
+
   return (
     <>
       <Header />
       <div className="w-full bg-black">
-        <div className="relative w-full h-[600px] md:h-[650px] overflow-hidden">
+        <div className="relative w-full h-[600px] md:h-[650px] ">
           <LiquidEther
             colors={["#39FF14", "#2CFF05", "#08CB00"]}
             mouseForce={20}
@@ -51,7 +93,7 @@ const Home = () => {
         pointer-events-none
       "
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center w-full max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 items-center w-full max-w-6xl">
               <div className="text-center md:text-left">
                 <div className="flex justify-end">
                   <img
@@ -69,44 +111,35 @@ const Home = () => {
                     alt=""
                   />
                 </div>
-                <h1 className="fntstyle text-white text-5xl md:text-7xl font-extrabold leading-tight p-4 mt-5">
-                  SPORTIFY
-                  <br />
-                  <span className="text-2xl md:text-4xl font-bold fntstyle">
-                    YOUR SPORTS COMPANION
-                  </span>
-                </h1>
-                <p className="text-white "> Play.Connect.Compete.</p>
-                <p className="text-white">
-                  {" "}
-                  Join matches , build teams , and grow your sports circle.Every
-                  game brings you one step closer to your best.
-                </p>
+                <div className="p-2 mx-2">
+                  <h1 className="fntstyle text-white text-5xl md:text-7xl font-extrabold leading-tight p-4 mt-5">
+                    SPORTIFY
+                    <br />
+                    <span className="text-2xl md:text-4xl font-bold fntstyle">
+                      YOUR SPORTS COMPANION
+                    </span>
+                  </h1>
+                  <p className="text-white "> Play.Connect.Compete.</p>
+                  <p className="text-white">
+                    {" "}
+                    Join matches , build teams , and grow your sports
+                    circle.Every game brings you one step closer to your best.
+                  </p>
+                </div>
                 <div className=" flex text-center justify-center items-center">
-                  <button
-                    className="text-white bg-linear-to-r from-lime-200 via-lime-400 to-lime-500  border-transparent px-4 py-2 rounded-pill  d-lg-flex mx-3
-       
-      "
+                  <Link
+                    to={"/turf"}
+                    className="text-white text-decoration-none bg-linear-to-r from-lime-200 via-lime-400 to-lime-500  border-transparent px-4 py-2 rounded-pill  d-lg-flex mx-3"
                   >
-                    <Link
-                      className="text-white text-decoration-none"
-                      to={"/login"}
-                    >
-                      EXPLORE MORE
-                    </Link>
-                  </button>
-                  <button
-                    className="text-white  border-2 border-green-500  px-4 py-2 rounded-pill  d-lg-flex mx-3
-       
-      "
+                    EXPLORE MORE
+                  </Link>
+
+                  <Link
+                    to={"/turf"}
+                    className="text-white text-decoration-none border-2 border-green-500  px-4 py-2 rounded-pill  d-lg-flex mx-3"
                   >
-                    <Link
-                      className="text-white text-decoration-none"
-                      to={"/login"}
-                    >
-                      BOOK TURF
-                    </Link>
-                  </button>
+                    BOOK TURF
+                  </Link>
                 </div>
               </div>
 
@@ -164,12 +197,12 @@ const Home = () => {
         </div>
 
         <div
-          className=" container my-5 my-md-4 mt-lg-5 row justify-content-center align-items-center gap-2 aos-init aos-animate"
+          className=" container my-5 my-md-4 mt-lg-5 row justify-content-center align-items-center gap-2  aos-init aos-animate"
           data-aos="fade-up"
           data-aos-delay="450"
           data-aos-duration="700"
         >
-          <div class="col-auto mx-2 px-0">
+          <div className="col-auto mx-2 px-0 ">
             <Link
               href="https://apps.apple.com/app/apple-store/id1594935699?pt=118739950&amp;ct=ios_home&amp;mt=8"
               className="btn btn-download p-0"
@@ -182,7 +215,7 @@ const Home = () => {
               />
             </Link>
           </div>
-          <div class="col-auto mx-2 px-0">
+          <div className="col-auto mx-2 px-0">
             <Link to={""} className="btn btn-download p-0" target="_blank">
               <img
                 src="https://www.loveandlustgame.com/static/images/web-app-beta-en.svg"
@@ -208,116 +241,148 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="container mt-10">
-          <div className="grid gap-5 sm:gap-6 lg:gap-x-5 lg:gap-y-7 sm:grid-cols-2 lg:grid-cols-4 grid-cols-1 mt-[34px] sm:mt-12 lg:mt-[60px]">
-            <div
-              data-aos="fade-left"
-              data-aos-duration="700"
-              className="bg-gray-900 p-6 rounded-2xl aos-init aos-animate"
-            >
-              <Avatar
-                style={{ width: "50px", borderRadius: "50%" }}
-                img="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA4L2pvYjEwMzQtZWxlbWVudC0wNS0zODUucG5n.png"
-                alt="avatar of Jese"
-                rounded
-              />{" "}
-              <div className="flex justify-center items-center rounded-lg">
-                <div className=" flex justify-center items-center rounded-lg">
-                  <div className="flex gap-1 text-yellow-400 text-2xl ">
-                    <span>★</span>
-                    <span>★</span>
-                    <span>★</span>
-                    <span>★</span>
-                    <span className="text-gray-400">★</span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-white">
-                As a beginner, most apps confuse me. But Sportify is simple,
-                easy to follow, and the progress charts make me feel proud of my
-                improvements.
-              </p>
-            </div>
-            <div
-              data-aos="fade-left"
-              data-aos-duration="700"
-              className="bg-gray-900 p-6 rounded-2xl aos-init aos-animate"
-            >
-              <Avatar
-                style={{ width: "50px", borderRadius: "50%" }}
-                img="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L2stczMxLXRlbi0xNjItam9iNy1qb2I5MDUucG5n.png"
-                alt="avatar of Jese"
-                rounded
-              />
-              <div className=" flex justify-center items-center rounded-lg">
-                <div className="flex gap-1 text-yellow-400 text-2xl ">
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                  <span className="text-gray-400">★</span>
-                </div>
-              </div>
-              <p className="text-white">
-                I’ve tried many fitness apps, but Sportify stands out. The
-                community vibe and the reminder system keep me active every day.
-              </p>
-            </div>
-            <div
-              data-aos="fade-left"
-              data-aos-duration="700"
-              className="bg-gray-900 p-6 rounded-2xl aos-init aos-animate"
-            >
-              <Avatar
-                style={{ width: "50px", borderRadius: "50%" }}
-                img="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA4L2pvYjEwMzQtZWxlbWVudC0wNi0zOTcucG5n.png"
-                alt="avatar of Jese"
-                rounded
-              />
-              <div className="flex justify-center items-center rounded-lg"></div>
-              <div className=" flex justify-center items-center rounded-lg">
-                <div className="flex gap-1 text-yellow-400 text-2xl ">
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                </div>
-              </div>
-              <p className="text-white">
-                I started using Sportify last month, and it genuinely helped me
-                stay consistent. The challenges are fun, and I like how
-                everything feels smooth and fast
-              </p>
-            </div>
-            <div
-              data-aos="fade-left"
-              data-aos-duration="700"
-              className="bg-gray-900 p-6 rounded-2xl aos-init aos-animate"
-            >
-              <Avatar
-                style={{ width: "50px", borderRadius: "50%" }}
-                img="https://img.freepik.com/premium-photo/smiling-man-png-sticker-round-badge-transparent-background_53876-996829.jpg?semt=ais_hybrid&w=740&q=80"
-                alt="avatar of Jese"
-                rounded
-              />
-              <div className="flex justify-center items-center rounded-lg"></div>
-              <div class=" flex justify-center items-center rounded-lg">
-                <div className="flex gap-1 text-yellow-400 text-2xl ">
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                  <span>★</span>
-                  <span className="text-gray-400">★</span>
-                </div>
-              </div>
-              <p className="text-white">
-                Sportify made my daily fitness routine so simple. I love how
-                clean the design is, and the tracking features keep me
-                motivated. Easily one of the best apps I’ve used!
-              </p>
-            </div>
+        <div className="relative h-72 bg-black overflow-hidden">
+          <div className="absolute top-1/2-left-1/2 w-[150%] bg-green-700 py-3 flex justify-around ">
+            <span className="text-white font-bold tracking-widest fntstyle text-2xl ">
+              SPORTIFY
+            </span>
+            <span className="text-white font-bold tracking-widest fntstyle text-2xl ">
+              SPORTIFY
+            </span>
+            <span className="text-white font-bold tracking-widest fntstyle text-2xl">
+              SPORTIFY
+            </span>
+            <span className="text-white font-bold tracking-widest fntstyle text-2xl">
+              SPORTIFY
+            </span>
+            <span className="text-white font-bold tracking-widest fntstyle text-2xl">
+              SPORTIFY
+            </span>
+            <span className="text-white font-bold tracking-widest fntstyle text-2xl">
+              SPORTIFY
+            </span>
           </div>
+        </div>
+
+        {/* card section */}
+
+        <section className="py-12 bg-black ">
+          <h2 className="text-3xl fntstyle text-center text-white mt-5">
+            Popular Events
+          </h2>
+          <p className="text-white text-center mt-2">Most Popular Events </p>
+          <div className="">
+            {homeEvents?.length > 0 && (
+              <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                {homeEvents?.map((eachEvent) => (
+                  <motion.div
+                    whileHover={{
+                      y: -10,
+                      scale: 1.05,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 10,
+                    }}
+                    className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+                  >
+                    <img
+                      src={`${BaseUrl}/uploads/${eachEvent.eventImage}`}
+                      alt="Football Turf"
+                      className="h-48 w-full object-cover"
+                    />
+                    <div className="p-4">
+                      <div>
+                        <Badge
+                          className="inline-block"
+                          color="success"
+                          size="sm"
+                        >
+                          {eachEvent.sportType}
+                        </Badge>
+                      </div>
+
+                      <h3 className="text-xl font-semibold text-gray-800">
+                        {eachEvent.eventName}
+                      </h3>
+
+                      <p className="text-gray-500 text-sm mt-1">
+                        <FontAwesomeIcon icon={faLocation} />
+                        {eachEvent.location}
+                      </p>
+                      <p className="text-green-600 font-bold mt-3">
+                        ₹{eachEvent.pricePerPerson} /person
+                      </p>
+                      <p className="text-green-700 font-bold">
+                        {eachEvent.status}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Heading */}
+          <div className="text-center mb-10">
+            <h2 className="text-3xl fntstyle text-white mt-5">Popular Turfs</h2>
+            <p className="text-white mt-2">Most booked turfs </p>
+          </div>
+
+          <div className="">
+            {homeTurfs?.length > 0 && (
+              <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                {homeTurfs?.map((eachTurf) => (
+                  <motion.div
+                    whileHover={{
+                      y: -10,
+                      scale: 1.05,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 10,
+                    }}
+                    className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+                  >
+                    <img
+                      src={eachTurf.imageURL}
+                      alt="Football Turf"
+                      className="h-48 w-full object-cover"
+                    />
+                    <div className="p-4">
+                      <div>
+                        <Badge
+                          className="inline-block"
+                          color="success"
+                          size="sm"
+                        >
+                          {eachTurf.sportsAvailability}
+                        </Badge>
+                      </div>
+
+                      <h3 className="text-xl font-semibold text-gray-800">
+                        {eachTurf.turfName}
+                      </h3>
+
+                      <p className="text-gray-500 text-sm mt-1">
+                        <FontAwesomeIcon icon={faLocation} />
+                        {eachTurf.location}
+                      </p>
+                      <p className="text-green-600 font-bold mt-3">
+                        ₹{eachTurf.pricePerHour} / hour
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        <div className="container  mt-10">
+          <TestimonialSlider />
         </div>
 
         <div className=" mt-20 container">
@@ -328,9 +393,20 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <div className=" flex justify-center items-center ">
+              <motion.div
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 10,
+                }}
+                className=" flex justify-center items-center "
+              >
                 <img style={{ width: "50px" }} src={highlighticon} alt="" />
-              </div>
+              </motion.div>
               <h5 className="text-white text-center">
                 Turn Every Moment Into a Highlight
               </h5>
@@ -345,9 +421,20 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <div className=" flex justify-center items-center">
+              <motion.div
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 10,
+                }}
+                className=" flex justify-center items-center"
+              >
                 <img style={{ width: "50px" }} src={icon2} alt="" />
-              </div>
+              </motion.div>
               <h5 className="text-white text-center">Stay Ahead of the Game</h5>
               <p className="text-white">
                 Get real-time scores, tips, and updates—fresh action every time
@@ -360,9 +447,20 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <div className=" flex justify-center items-center">
+              <motion.div
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 10,
+                }}
+                className=" flex justify-center items-center"
+              >
                 <img style={{ width: "50px" }} src={targeticon} alt="" />
-              </div>
+              </motion.div>
 
               <h5 className="text-white text-center">
                 Built Around Your Interests
@@ -378,9 +476,20 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <div className=" flex justify-center items-center">
+              <motion.div
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 10,
+                }}
+                className=" flex justify-center items-center"
+              >
                 <img style={{ width: "50px" }} src={msgicon} alt="" />
-              </div>
+              </motion.div>
               <h5 className="text-white text-center">
                 Connect Without Pressure
               </h5>
@@ -395,9 +504,20 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <div className=" flex justify-center items-center">
+              <motion.div
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 10,
+                }}
+                className=" flex justify-center items-center"
+              >
                 <img style={{ width: "50px" }} src={lockicon} alt="" />
-              </div>
+              </motion.div>
               <h5 className="text-white text-center">Your Data, Your Game</h5>
               <p className="text-white">
                 We protect your privacy. Your profile, chats, and preferences
@@ -410,9 +530,20 @@ const Home = () => {
               data-aos-delay="450"
               data-aos-duration="700"
             >
-              <div className=" flex justify-center items-center">
+              <motion.div
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 10,
+                }}
+                className=" flex justify-center items-center"
+              >
                 <img style={{ width: "50px" }} src={icon1} alt="" />
-              </div>
+              </motion.div>
               <h5 className="text-white text-center">
                 Sportify Anywhere, Anytime
               </h5>
@@ -423,55 +554,8 @@ const Home = () => {
             </div>
           </div>
         </div>
-{/* popular sports */}
-        {/* <section class="mt-7 p-5">
-          
-          <div class=" container grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5  gap-4">
-            <div
-              className="aos-init aos-animate "
-              data-aos="fade-up"
-              data-aos-delay="450"
-              data-aos-duration="700"
-            >
-            
-            </div>
-            <div
-              className="aos-init aos-animate"
-              data-aos="fade-up"
-              data-aos-delay="450"
-              data-aos-duration="700"
-            >
-             
-            </div>
 
-            <div
-              className="aos-init aos-animate"
-              data-aos="fade-up"
-              data-aos-delay="450"
-              data-aos-duration="700"
-            >
-             
-            </div>
-
-            <div
-              className="aos-init aos-animate"
-              data-aos="fade-up"
-              data-aos-delay="450"
-              data-aos-duration="700"
-            >
-             
-            </div>
-            <div
-              className="aos-init aos-animate"
-              data-aos="fade-up"
-              data-aos-delay="450"
-              data-aos-duration="700"
-            >
-              
-            </div>
-          </div>
-        </section> */}
-        <Slider/>
+        <Slider />
 
         <div className="container rounded-2xl bg-green-400 mt-3">
           <div className="row ">
@@ -496,7 +580,7 @@ const Home = () => {
                 data-aos-delay="450"
                 data-aos-duration="700"
               >
-                <div class="col-auto mx-2 px-0">
+                <div className="col-auto mx-2 px-0">
                   <Link
                     href="https://apps.apple.com/app/apple-store/id1594935699?pt=118739950&amp;ct=ios_home&amp;mt=8"
                     className="btn btn-download p-0"
@@ -509,7 +593,7 @@ const Home = () => {
                     />
                   </Link>
                 </div>
-                <div class="col-auto mx-2 px-0">
+                <div className="col-auto mx-2 px-0">
                   <Link
                     to={""}
                     className="btn btn-download p-0"
@@ -527,7 +611,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
