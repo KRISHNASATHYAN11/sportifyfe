@@ -5,6 +5,36 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAddressCard, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
+const contactInfo = [
+  {
+    icon: faAddressCard,
+    title: "Address",
+    info: "931 Marlynx Drive, Seattle-18104",
+    link: "https://maps.google.com/?q=931+Marlynx+Drive+Seattle",
+    isLink: true
+  },
+  {
+    icon: faPhone,
+    title: "Phone",
+    info: "+1-760-284-3410",
+    link: "tel:+17602843410",
+    isLink: true
+  },
+  {
+    icon: faEnvelope,
+    title: "Email",
+    info: "sportifysupport@gmail.com",
+    link: "mailto:sportifysupport@gmail.com",
+    isLink: true
+  },
+  {
+    icon: faClock,
+    title: "Business Hours",
+    info: "Mon-Fri: 9:00 AM - 6:00 PM PST",
+    isLink: false
+  }
+];
+
 const Contact = () => {
   return (
     <>
