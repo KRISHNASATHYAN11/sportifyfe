@@ -33,16 +33,21 @@ const Auth = ({ insideRegister }) => {
 
   const onLoginClick = async () => {
     try {
-      let reqBody = registerData;
+      let reqBody = { ...registerData };
       delete reqBody.userName;
+
       // only need email and password here so removed username from the reqbody
       let apiResponse = await loginUser(reqBody);
-      console.log(apiResponse);
+      console.log(apiResponse.data.user);
       if (apiResponse.status == 200) {
         localStorage.setItem("token", apiResponse.data.token);
         localStorage.setItem("user", JSON.stringify(apiResponse.data.user));
         toast.success("Login Success");
-        navigate("/");
+        if (apiResponse.data.user.userType == "owner") {
+          navigate("/ownerhome");
+        } else {
+          navigate("/");
+        }
       } else {
         toast.error(apiResponse.response.data.message);
       }
@@ -69,22 +74,22 @@ const Auth = ({ insideRegister }) => {
       localStorage.setItem("user", JSON.stringify(apiResponse.data.user));
       toast.success("Login Success");
       navigate("/");
-    }else{
-      toast.error("Error Occurred in Google Authentication")
+    } else {
+      toast.error("Error Occurred in Google Authentication");
     }
   };
 
   return (
     <>
       <div className="container-fluid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-        <div className="bg-black lg:min-h-screen md:min-h-screen rounded-r-4xl">
+        <div className="bg-white lg:min-h-screen md:min-h-screen rounded-r-4xl">
           <div className="text-center ">
             <p className="text-white text-3xl fntstyle mt-5">
-              <span className="text-green-200 fntstyle ">Welcome Back ! </span>{" "}
+              <span className="text-green-700 fntstyle ">Welcome Back ! </span>{" "}
               <br /> Login to continue your sports journey
             </p>
             <div className="flex justify-center items-center">
-              <img className="w-75" src={sportsimg} alt="" />
+              <img className="w-75" src="https://assets-v2.lottiefiles.com/a/da8d9286-116e-11ee-aeac-07c47fa5efd8/yRmxUgvzA6.gif" alt="" />
             </div>
           </div>
         </div>

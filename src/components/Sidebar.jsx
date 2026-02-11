@@ -54,7 +54,7 @@ const Sidebar = () => {
             <span>
               <FontAwesomeIcon icon={faUser} />
             </span>{" "}
-            <Link className="text-decoration-none text-white" to={""}>
+            <Link className="text-decoration-none text-white" to={"/profile"}>
               Profile
             </Link>
           </li>
@@ -62,11 +62,12 @@ const Sidebar = () => {
             <span>
               <FontAwesomeIcon icon={faUserGroup} />
             </span>{" "}
-            <Link className="text-decoration-none text-white" to={""}>
+            <Link  className="text-decoration-none text-white" to={"/team"}>
               Team Up
             </Link>
           </li>
         </ul>
+      
       </div>
     </>
   );

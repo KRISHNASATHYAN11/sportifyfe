@@ -10,7 +10,7 @@ const Contact = () => {
     <>
     <Header/>
 
-    <section className="bg-gray-900 py-16 px-4 text-white">
+    <section className="bg-black py-16 px-4 text-white">
   <div className="max-w-6xl mx-auto">
 
     <div className="text-center mb-12">

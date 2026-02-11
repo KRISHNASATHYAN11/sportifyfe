@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams} from "react-router-dom";
-import { getSingleEvent } from "../services/AllApi";
+import { getSingleEvent, MakeEventBooking } from "../services/AllApi";
 import toast from "react-hot-toast";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { BaseUrl } from "../services/BaseURL";
+import { loadStripe } from "@stripe/stripe-js";
 
 
 const SingleEvent = () => {
@@ -36,6 +37,45 @@ const SingleEvent = () => {
       toast.error("Error Occurred while getting Turf Details");
     }
   };
+
+
+   const onEventBookClick = async () => {
+    try {
+      const stripe = await loadStripe(
+        "pk_test_51Sl1cgBorw3jwEWgfacnmH8TnAZZX8oRKwFJwsE9r5sfjarVcIzudD4TM6H6YfWsLlHjqTf4ErsqyEfpR3RPCsrE00ef1FdgCQ"
+      );
+
+      let token = localStorage.getItem("token");
+
+      let header = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      let reqBody = {
+        eventId: EventDetail._id,
+        eventName: EventDetail.eventName,
+        eventDate: EventDetail.eventDate,
+        eventTime: `${EventDetail.startTime} - ${EventDetail.endTime}`,
+        pricePerPerson: EventDetail.pricePerPerson,
+        numberOfPlayers: 1, // default 1, can make dynamic later
+        ownerEmail: EventDetail.createdBy,
+        eventImage: EventDetail.eventImage,
+      };
+
+      let apiResponse = await MakeEventBooking(reqBody, header);
+
+      if (apiResponse.status === 200) {
+        let session = apiResponse.data.session;
+        window.location.href = session.url;
+      } else {
+        toast.error("Event booking failed");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong while booking");
+    }
+  };
+
 
   return (
     <>
@@ -77,7 +117,7 @@ const SingleEvent = () => {
             </div>
 
             <div className="mt-5 text-center flex justify-center ">
-              <Link to={""} className="bg-linear-to-r from-green-500 via-green-900 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-base  px-10 py-3 text-center leading-5 text-decoration-none text-white mx-2 ">
+              <Link  onClick={onEventBookClick} to={""} className="bg-linear-to-r from-green-500 via-green-900 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-base  px-10 py-3 text-center leading-5 text-decoration-none text-white mx-2 ">
                 Book Now
               </Link>
               <Link to={""} className="bg-linear-to-r from-green-500 via-green-400 to-green-300 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-200 font-medium rounded-base  px-10 py-3 text-center leading-5 text-decoration-none text-white mx-2">

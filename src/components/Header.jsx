@@ -11,7 +11,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import { FiInstagram } from "react-icons/fi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignOut, faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut, faUser, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
   const [token, setToken] = useState("");
@@ -70,12 +70,7 @@ const Header = () => {
                   label={
                     <div className="flex">
                       <Link to={"/profile"}>
-                        <Avatar
-                          style={{ width: "50px", borderRadius: "50%" }}
-                          img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrWl3NFJnWwwjlBSSbNxJcQ2EpYbFhtX4M0Q&s"
-                          alt="avatar of Jese"
-                          rounded
-                        />
+                        <FontAwesomeIcon style={{color:"white",padding:"10px",borderRadius:"50%",backgroundColor:"green"}} icon={faUser}/>
                       </Link>
                     </div>
                   }
@@ -97,7 +92,7 @@ const Header = () => {
                 </Dropdown>
               ) : (
                 <Link className="text-white text-decoration-none" to={"/login"}>
-                  <button className=" bg-linear-to-r from-lime-200 via-lime-400 to-lime-500  border-transparent px-4 py-1 mx-5 rounded-pill d-none d-lg-flex ">
+                  <button className=" bg-linear-to-r from-lime-200 via-lime-400 to-lime-500  border-transparent px-4 py-2 mx-5 rounded-pill d-none d-lg-flex ">
                     Login
                   </button>
                 </Link>

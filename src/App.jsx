@@ -19,6 +19,11 @@ import AddTurf from "./Owner/pages/AddTurf";
 import ViewSingle from "./pages/ViewSingle";
 import AddEvent from "./Owner/pages/AddEvent";
 import SingleEvent from "./pages/SingleEvent";
+import BookingSuccess from "./components/BookingSuccess";
+import BookingFailure from "./components/BookingFailure";
+import Eventbookingfailure from "./components/Eventbookingfailure";
+import Eventbookingsuccess from "./components/Eventbookingsuccess";
+import Team from "./components/Team";
 
 function App() {
 
@@ -44,6 +49,11 @@ function App() {
         <Route path="adminui" element={<AdminUi />} />
         <Route path="/:id/viewsingle" element ={<ViewSingle/>}/>
         <Route path="/:id/singleevent" element ={<SingleEvent/>}/>
+        <Route path="/bookingsuccess" element={<BookingSuccess/>}/>
+        <Route path="/bookingfailure" element={<BookingFailure/>}/>
+        <Route path="/eventbookingfailure" element={<Eventbookingfailure/>}/>
+        <Route path="/eventbookingsuccess" element={<Eventbookingsuccess/>}/>
+        <Route path="/team" element={<Team/>}/>
 
 
 

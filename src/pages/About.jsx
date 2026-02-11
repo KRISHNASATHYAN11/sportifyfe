@@ -174,7 +174,7 @@ const About = () => {
         </div>
         <div className="grid grid-cols-[1fr_2fr] gap-2 mx-3 mt-10">
           <div>
-            <img src={aboutimg} alt="" />
+            <img className="mx-5" src="https://png.pngtree.com/background/20250105/original/pngtree-image-of-soccer-player-in-green-field-full-screen-wallpaper-the-picture-image_15571310.jpg" alt="" />
           </div>
           <div className=" mt-5 p-3 mx-5 text-center">
             <p className="text-7xl  fntstyle text-transparent bg-clip-text bg-linear-to-r from-white via-green-500 to-green-200">

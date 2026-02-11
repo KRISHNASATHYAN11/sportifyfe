@@ -73,4 +73,16 @@ export const MakeBooking = async(reqBody,reqHeader)=>{
   return await commonApi ('post',`${BaseUrl}/makeBooking`,reqBody,reqHeader )
 }
 
+export const MakeEventBooking = async(reqBody,reqHeader)=>{
+  return await commonApi ('post',`${BaseUrl}/eventBooking`,reqBody,reqHeader )
+}
+
+export const createTeam = async (reqBody, headers) => {
+  return await commonApi(
+    "post",
+    `${BaseUrl}/create-team`,
+    reqBody,
+    headers
+  );
+};
 
