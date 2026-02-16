@@ -13,17 +13,15 @@ import { getAllTurf } from "../services/AllApi";
 import { Badge } from "flowbite-react";
 import toast from "react-hot-toast";
 
-
 const Turf = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [turfData, setTurfData] = useState([]);
   const [sportsAvailability, setSportsAvailability] = useState([]);
 
-
   const [dummyTurf, setDummyTurf] = useState([]);
 
-  const [search,setSearch] = useState('')
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     let token = localStorage.getItem("token");
@@ -39,12 +37,12 @@ const Turf = () => {
       let reqHeader = {
         Authorization: `Bearer ${token}`,
       };
-      let apiResponse = await getAllTurf(reqHeader,search);
+      let apiResponse = await getAllTurf(reqHeader, search);
       if (apiResponse.status == 200) {
         setTurfData(apiResponse.data.AllTurfs);
         setDummyTurf(apiResponse.data.AllTurfs);
         let sportsArray = apiResponse.data.AllTurfs.map(
-          (eachTurf) => eachTurf.sportsAvailability
+          (eachTurf) => eachTurf.sportsAvailability,
         );
         setSportsAvailability(sportsArray);
         // to avaoid adding same sports availability again and again
@@ -60,7 +58,7 @@ const Turf = () => {
         setSportsAvailability(dummySport);
       } else {
         toast.error(apiResponse.response.data.message);
-        navigate('/login')
+        navigate("/login");
       }
     } catch (error) {
       toast.error("Error Occurred While getting turf");
@@ -69,7 +67,7 @@ const Turf = () => {
 
   const filterTurfs = (sportsAvailability) => {
     let filteredTurfs = dummyTurf.filter(
-      (eachTurf) => eachTurf.sportsAvailability == sportsAvailability
+      (eachTurf) => eachTurf.sportsAvailability == sportsAvailability,
     );
     setTurfData(filteredTurfs);
   };
@@ -81,20 +79,21 @@ const Turf = () => {
         <>
           <div className="container-fluid bg-black">
             <div className=" container">
-              <div className="flex justify-center ">
-                <input onChange={(e)=>setSearch(e.target.value)}
+              <div className="flex justify-center  ">
+                <input
+                  onChange={(e) => setSearch(e.target.value)}
                   placeholder=" Search By Location"
-                  className="bg-white border-2 p-2 placeholder:ps-2 rounded-l-2xl w-96"
+                  className="bg-white border-2 p-2 placeholder:ps-2 rounded-l-2xl w-96 mt-4"
                   type="text"
                 />
-                <button className="bg-green-500 font-bold border-2 border-black rounded-l-2xl focus:ring-1 focus:ring-emerald-300 text-white px-4">
+                <button className="bg-green-500 mt-4 font-bold border-2 border-black rounded-l-2xl focus:ring-1 focus:ring-emerald-300 text-white px-4">
                   Search
                 </button>
               </div>
 
-              <div>
+              <div className="container  hidden md:flex md:justify-center md:items-center ">
                 {sportsAvailability?.length > 0 && (
-                  <div className="flex justify-center items-center mx-3">
+                  <div className="flex justify-center items-center">
                     <motion.div
                       whileHover={{
                         y: -10,
@@ -139,7 +138,7 @@ const Turf = () => {
             </div>
 
             <h2 className="mx-3 mt-3 text-white">Recommended For You</h2>
-            <div>
+            <div className="p-4 bg-stone-800">
               {turfData?.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-2 p-4">
                   {turfData?.map((eachTurf) => (
@@ -156,11 +155,17 @@ const Turf = () => {
                       className="w-fit relative"
                     >
                       <Card
-                        className="max-w-xs"
+                        className="max-w-xs bg-black p-2 h-full object-cover object-center"
                         imgAlt=""
                         imgSrc={eachTurf.imageURL}
+                        style={{
+                          width: "full",
+                          height: "full",
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
                       >
-                        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        <h5 className="text-2xl font-bold tracking-tight text-white ">
                           {eachTurf.turfName}
                         </h5>
                         <div>
@@ -173,7 +178,7 @@ const Turf = () => {
                           </Badge>
                         </div>
 
-                        <div className="text-gray-500 text-justify">
+                        <div className="text-white text-justify">
                           <h6>
                             <FontAwesomeIcon icon={faLocation} />
                             {eachTurf.location}
@@ -197,7 +202,7 @@ const Turf = () => {
               )}
             </div>
 
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center bg-stone-800 p-3">
               <Link className="text-white bg-linear-to-r from-green-500 via-green-900 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  rounded-base text-sm px-4 py-2.5 text-center leading-5 font-bold text-decoration-none">
                 View More
               </Link>

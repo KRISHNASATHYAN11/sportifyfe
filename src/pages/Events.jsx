@@ -11,6 +11,7 @@ import { BaseUrl } from "../services/BaseURL";
 import { Link, useNavigate } from "react-router-dom";
 
 const Events = () => {
+  
   const [eventData, setEventData] = useState([]);
   const [location, setlocation] = useState([]);
 
@@ -122,9 +123,9 @@ const Events = () => {
           </div>
         )}
 
-        <div className="container mt-10 p-3">
+        <div className=" mt-10 p-3">
           <h4 className="text-white mb-5">Events</h4>
-          <div>
+          <div className="p-4 bg-stone-800">
             {eventData?.length > 0 && (
               <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
                 {eventData?.map((eachEvent) => (
@@ -139,38 +140,36 @@ const Events = () => {
                       damping: 10,
                     }}
                   >
-                    <Card className="max-w-xs h-[600px] overflow-hidden">
-                      <img
+                    <Card className="max-w-xs  overflow-hidden h-full object-cover object-center bg-black">
+                      <img className="w-full h-full object-cover object-center"
                         src={`${BaseUrl}/uploads/${eachEvent.eventImage}`}
                         alt=""
                       />
                       <div className="space-y-1">
-                        <h5 className="font-bold  text-green-500">
+                        <p className="font-bold  text-white">
                           {eachEvent.eventName}
-                        </h5>
-                        <span className="font-normal text-gray-700 dark:text-gray-400">
+                        </p>
+                        <span className="font-normal text-white ">
                           {eachEvent.sportType}
                         </span>
 
-                        <p className="font-normal text-gray-700 dark:text-gray-400">
+                        <p className="font-normal text-white ">
                           <FontAwesomeIcon icon={faLocationPin} />
                           {eachEvent.location}
                         </p>
-                        <span>{eachEvent.turfName}</span>
+                        <span className="text-white">Venue : {eachEvent.turfName}</span>
 
-                        <p>
+                        <p className="text-white">
                           <FontAwesomeIcon icon={faClock} />{" "}
                           {eachEvent.startTime} - {eachEvent.endTime}
                         </p>
-
-                        <span>MaxPlayers:{eachEvent.maxPlayers}</span>
-                        <p className="text-black font-bold mt-2">
+                        <p className="text-white font-bold mt-2">
                           ₹{eachEvent.pricePerPerson}/Person
                         </p>
                       </div>
                       <Link
                         to={`/${eachEvent._id}/singleevent`}
-                        className="text-white text-decoration-none bg-linear-to-r from-green-500 via-green-900 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-base text-sm px-4 py-2.5 text-center mt-auto"
+                        className="text-white text-decoration-none bg-linear-to-r from-green-500 via-green-500 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-base text-sm px-4 py-2.5 text-center mt-auto"
                       >
                         Book Now
                       </Link>
@@ -180,13 +179,14 @@ const Events = () => {
               </div>
             )}
           </div>
-        </div>
-
-        <div className="flex justify-center items-center">
-          <button className="mt-3 px-4 py-1 rounded-full text-sm font-semibold border border-[#2CFF05] bg-[#2CFF05] hover:shadow-[0_0_10px_#2CFF05] transition hover:bg-black hover:text-white rounded-pill ">
+           <div className="flex justify-center items-center bg-stone-800 p-3">
+          <button className="text-white text-decoration-none bg-linear-to-r from-green-500 via-green-500 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-base text-sm px-4 py-2.5 text-center mt-auto ">
             View More...
           </button>
         </div>
+        </div>
+
+       
       </div>
       <Footer />
     </>

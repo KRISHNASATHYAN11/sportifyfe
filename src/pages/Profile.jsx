@@ -2,21 +2,41 @@ import React, { useEffect, useState } from "react";
 import { Card } from "flowbite-react";
 import Sidebar from "../components/Sidebar";
 import MobileSideBar from "../components/MobileSideBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "flowbite-react";
 import {
   faClock,
   faLocation,
   faStickyNote,
 } from "@fortawesome/free-solid-svg-icons";
 import { BaseUrl } from "../services/BaseURL";
-import { getAllUsers, updateFollow, updateUnFollow } from "../services/AllApi";
+import { addPost, getAllUsers, updateFollow, updateUnFollow } from "../services/AllApi";
+import toast from "react-hot-toast";
 // import { Card } from "flowbite-react";
 // import Image from "next/image";
 
 const Profile = () => {
   const [userData, setUserData] = useState({});
   const [allUser, setAllUser] = useState({});
+  const [openModal, setOpenModal] = useState(true);
+  const navigate = useNavigate();
+
+  const [preview, setPreview] = useState(
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQhSnEWozdEy0uvh4J_OavlWNk1QRZoduBrQ&s",
+  );
+
+  const [postData, setPostData] = useState({
+    caption: "",
+    postImage: "",
+  });
 
   useEffect(() => {
     loadProfileData();
@@ -82,10 +102,46 @@ const Profile = () => {
     }
   };
 
+  const handleImageUpload = (e) => {
+    setPostData({ ...postData, postImage: e.target.files[0] });
+    setPreview(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const handleAddPost = async () => {
+    try {
+      if (!postData.caption || !postData.postImage) {
+        toast.error("Please add image and description");
+        return;
+      }
+
+      let token = localStorage.getItem("token");
+
+      let header = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      };
+
+      let reqBody = new FormData();
+
+      for (let key in postData) {
+        reqBody.append(key, postData[key]);
+      }
+
+      const apiResponse = await addPost(id,reqBody, header);
+
+      if (apiResponse.status === 201) {
+        toast.success("Post Added Successfully");
+        navigate("/profile");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong while adding post");
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-screen bg-stone-900">
-        
         <Sidebar />
 
         <div className="flex-1 md:ml-60 p-4">
@@ -132,6 +188,12 @@ const Profile = () => {
                 >
                   Edit Profile
                 </Link>
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="bg-lime-500 p-2 rounded px-4"
+                >
+                  + Post
+                </button>
               </div>
             </div>
 
@@ -345,6 +407,53 @@ const Profile = () => {
 
         <MobileSideBar />
       </div>
+
+      <Modal
+        className="w-75 mx-50 "
+        show={openModal}
+        onClose={() => setOpenModal(false)}
+      >
+        <ModalHeader>Add Post</ModalHeader>
+        <ModalBody>
+          <div className="space-y-6">
+            <label htmlFor="image">
+              <input
+                onChange={handleImageUpload}
+                hidden
+                type="file"
+                name=""
+                id="image"
+              />
+              <img src={preview} alt="" />
+            </label>
+            <textarea
+              value={postData.caption}
+              onChange={(e) =>
+                setPostData({ ...postData, caption: e.target.value })
+              }
+              rows={5}
+              className="border w-full"
+              placeholder="Description"
+              place
+              type="text"
+            />
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            className="bg-green-500 text-white p-2 rounded px-4 mx-2"
+            onClick={handleAddPost}
+          >
+            Post
+          </Button>
+          <Button
+            className="border-2 border-green-500 rounded text-green-500 p-2 px-4"
+            onClick={() => navigate("/profile")}
+          >
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
     </>
   );
 };

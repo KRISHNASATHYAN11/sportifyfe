@@ -32,6 +32,16 @@ function App() {
     setShowHome(true)
   },1000)
 
+  const [showEvent,setShowEvent]= useState(false)
+    setTimeout(()=>{
+      setShowEvent(true)
+    },1000)
+  const [showTurf,setShowTurf]= useState(false)
+    setTimeout(()=>{
+      setShowTurf(true)
+    },1000)
+  
+
 
   return (
     <>
@@ -42,8 +52,8 @@ function App() {
         <Route path="/register" element={<Auth insideRegister={true} />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/editprofile" element={<Editprofile />} />
-        <Route path="/turf" element={<Turf />} />
-        <Route path="/events" element={<Events />} />
+        <Route path="/turf" element={showTurf?<Turf />:<Loader/>} />
+        <Route path="/events" element={showEvent?<Events />:<Loader/>} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="adminui" element={<AdminUi />} />
