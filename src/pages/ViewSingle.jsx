@@ -15,8 +15,6 @@ const ViewSingle = () => {
     getTurfDetails();
   }, []);
 
-  // useParams return an  object of key-value pairs of the dynamic params from the current URL that were matched by the routes.
-
   let { id } = useParams();
   console.log(id);
 
@@ -40,7 +38,6 @@ const ViewSingle = () => {
   };
 
   const onBookClick = async () => {
-    // load strip return promise handle async await
     const stripe = await loadStripe(
       "pk_test_51Sl1cgBorw3jwEWgfacnmH8TnAZZX8oRKwFJwsE9r5sfjarVcIzudD4TM6H6YfWsLlHjqTf4ErsqyEfpR3RPCsrE00ef1FdgCQ",
     );
@@ -62,100 +59,226 @@ const ViewSingle = () => {
     };
 
     let apiResponse = await MakeBooking(reqBody, header);
-    if (apiResponse.status == 200) {
+    if (apiResponse.status === 200) {
       let session = apiResponse.data.session;
       window.location.href = session.url;
     } else {
-      toast.error(apiResponse.response.data.message);
+      toast.error(apiResponse.response?.data?.message || "Booking failed");
     }
   };
 
   return (
     <>
-      <div>
-        <Header />
-        <h1 className=" text-start mt-3 mx-4 p-2">{TurfDetail?.turfName}</h1>
-        <div className="mx-5">
-          <h3 className="text-lg font-semibold mb-2 mt-3">
-            {TurfDetail?.location}
-          </h3>
+      <style>
+        {`
+          @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+          }
+          @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(74, 222, 128, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(74, 222, 128, 0.6); }
+          }
+          @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-float { animation: float 6s ease-in-out infinite; }
+          .animate-pulse-glow { animation: pulse-glow 3s infinite; }
+          .animate-slide-up { animation: slide-up 0.8s ease-out forwards; }
+          .delay-100 { animation-delay: 100ms; opacity: 0; }
+          .delay-200 { animation-delay: 200ms; opacity: 0; }
+          .delay-300 { animation-delay: 300ms; opacity: 0; }
+        `}
+      </style>
+
+      <div className="relative min-h-screen bg-[#050505] text-white font-sans selection:bg-[#4ade80] selection:text-black overflow-hidden">
+        
+        {/* Animated Background Blobs */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[120px] animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse" style={{animationDelay: '2s'}}></div>
         </div>
 
-        <div className="m-5 grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1  gap-3">
-          <div>
-            <img
-              className=" bg-[#3b5d50] rounded-2xl  shadow-lg p-3 text-center text-white hover:shadow-2xl"
-              src={TurfDetail?.imageURL}
-              alt=""
-            />
-              <div className="border rounded-2xl border-transparent shadow-2xl text-center w-full p-5 mt-4 ">
-              <h5>maxPLayer</h5>
-              <h6>
-                {TurfDetail.maxPlayers}
-                
-              </h6>
-            </div>
-          </div>
+        <Header className="relative z-50" />
 
-          <div>
-            <div className="border rounded-2xl border-transparent shadow-2xl text-center w-full p-5 ">
-              <h5>Timing</h5>
-              <h6>
-                timeSlot: {TurfDetail.openingTime}am - {TurfDetail.closingTime}pm
-                
-              </h6>
-            </div>
+        <div className="relative z-10 container mx-auto px-6 py-10">
           
-
-            <div className="border rounded-2xl border-transparent shadow-2xl text-center w-full p-5 mt-5 ">
-              <h5>Location</h5>
-              <h6>{TurfDetail?.location}</h6>
+          {/* Hero Title */}
+          <div className="text-center mb-16 animate-slide-up">
+            <div className="inline-block px-4 py-1 rounded-full border border-green-500/30 bg-green-500/10 text-green-400 text-xs font-bold tracking-widest uppercase mb-4 animate-pulse">
+              Premium Turf
             </div>
-            <div className="border rounded-2xl border-transparent shadow-2xl text-center w-full p-5 mt-5 ">
-              <h5>pricePerHour/Person</h5>
-              <h6>₹{TurfDetail?.pricePerHour}</h6>
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-4 tracking-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500">
+                {TurfDetail?.turfName}
+              </span>
+            </h1>
+            <p className="text-gray-400 text-lg flex items-center justify-center gap-2">
+              <i className="fa-solid fa-location-dot text-green-400"></i>
+              {TurfDetail?.location}
+            </p>
+          </div>
+
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+            
+            {/* Left: Floating Image Card */}
+            <div className="relative animate-slide-up delay-100 group">
+              <div className="absolute -inset-2 bg-gradient-to-r from-green-400 to-blue-600 rounded-[2rem] blur opacity-30 group-hover:opacity-50 transition duration-700 animate-float"></div>
+              <div className="relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl">
+                <img
+                  className="w-full h-[500px] object-cover transform group-hover:scale-110 transition duration-700 ease-out"
+                  src={TurfDetail?.imageURL}
+                  alt={TurfDetail?.turfName}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+              </div>
             </div>
 
-            <div className="mt-5 text-center flex justify-center ">
-              <button
-                onClick={onBookClick}
-                className="bg-linear-to-r from-green-500 via-green-900 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-base  px-10 py-3 text-center leading-5 text-decoration-none text-white mx-2 "
-              >
-                Book Now
-              </button>
-              <Link
-                to={"/turf"}
-                className="bg-linear-to-r from-green-500 via-green-400 to-green-300 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-200 font-medium rounded-base  px-10 py-3 text-center leading-5 text-decoration-none text-white mx-2"
-              >
-                Back
-              </Link>
+            {/* Right: Interactive Details */}
+            <div className="space-y-6 animate-slide-up delay-200">
+              
+              {/* Detail Bars (Data Pills) */}
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-2">
+                {/* Timing Bar */}
+                <div className="group flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-all duration-300 hover:translate-x-2 cursor-default">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                      <i className="fa-regular fa-clock text-xl"></i>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Timing</p>
+                      <p className="text-gray-400">Daily</p>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-white">
+                    {TurfDetail?.openingTime} - {TurfDetail?.closingTime}
+                  </h3>
+                </div>
+                
+                <div className="h-px bg-white/10 mx-4"></div>
+
+                {/* Location Bar */}
+                <div className="group flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-all duration-300 hover:translate-x-2 cursor-default">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+                      <i className="fa-solid fa-map-pin text-xl"></i>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Venue</p>
+                      <p className="text-gray-400">Main Arena</p>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-white truncate max-w-[150px]">{TurfDetail?.location}</h3>
+                </div>
+
+                <div className="h-px bg-white/10 mx-4"></div>
+
+                {/* Price Bar */}
+                <div className="group flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-all duration-300 hover:translate-x-2 cursor-default">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center text-[#4ade80] group-hover:scale-110 transition-transform">
+                      <i className="fa-solid fa-tag text-xl"></i>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Price</p>
+                      <p className="text-gray-400">Per Hour</p>
+                    </div>
+                  </div>
+                  <h3 className="text-3xl font-extrabold text-[#4ade80] drop-shadow-[0_0_10px_rgba(74,222,128,0.5)]">₹{TurfDetail?.pricePerHour}</h3>
+                </div>
+
+                <div className="h-px bg-white/10 mx-4"></div>
+
+                {/* Max Players Bar */}
+                <div className="group flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-all duration-300 hover:translate-x-2 cursor-default">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform">
+                      <i className="fa-solid fa-users text-xl"></i>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-bold">Capacity</p>
+                      <p className="text-gray-400">Max Players</p>
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">{TurfDetail?.maxPlayers}</h3>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col gap-4 pt-4 animate-slide-up delay-300">
+                 <button 
+                    onClick={onBookClick} 
+                    className="relative overflow-hidden group bg-[#4ade80] text-black font-extrabold py-5 px-8 rounded-2xl shadow-[0_0_20px_rgba(74,222,128,0.3)] hover:shadow-[0_0_40px_rgba(74,222,128,0.6)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 text-xl"
+                  >
+                    <span className="relative z-10">Book Now</span>
+                    <i className="fa-solid fa-arrow-right relative z-10 group-hover:translate-x-1 transition-transform"></i>
+                    {/* Shimmer Effect */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-white/30 transition-transform duration-700 ease-in-out z-0 skew-x-12"></div>
+                  </button>
+
+                 <Link to={"/turf"} className="text-center text-gray-400 hover:text-white transition-colors py-2 flex items-center justify-center gap-2 group">
+                    <i className="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+                    Go Back
+                 </Link>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="container">
-          <div className="border rounded-2xl border-transparent shadow-2xl text-center w-1/2 p-5 mt-5 ">
-            <h5>Sports Availability</h5>
-            <h6>{TurfDetail?.sportsAvailability}</h6>
+          {/* Description Card */}
+          <div className="mt-20 animate-slide-up delay-300">
+             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden group">
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-green-500/20 rounded-full blur-3xl group-hover:bg-green-500/30 transition duration-500"></div>
+
+                <div className="relative z-10 flex flex-col md:flex-row gap-8">
+                   <div className="md:w-1/4">
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-700 flex items-center justify-center text-white text-2xl shadow-lg mb-4">
+                         <i className="fa-solid fa-quote-left"></i>
+                      </div>
+                      <h4 className="text-2xl font-bold text-white">About Turf</h4>
+                   </div>
+                   <div className="md:w-3/4">
+                      <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                         {TurfDetail?.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300 uppercase tracking-wide">
+                          Sports: {TurfDetail?.sportsAvailability}
+                        </span>
+                      </div>
+                   </div>
+                </div>
+             </div>
           </div>
+
+          {/* Gallery Section */}
+          {imageArray.length > 0 && (
+            <div className="mt-20 animate-slide-up delay-300">
+               <h2 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+                  <span className="w-2 h-8 bg-[#4ade80] rounded-full shadow-[0_0_10px_#4ade80]"></span>
+                  Turf Gallery
+               </h2>
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {imageArray.map((eachImage, index) => (
+                    <div key={index} className="relative group overflow-hidden rounded-2xl border border-white/10">
+                       <img
+                          className="w-full h-[250px] object-cover transform group-hover:scale-110 transition duration-500 ease-out"
+                          src={`${BaseUrl}/uploads/${eachImage}`}
+                          alt="Turf view"
+                       />
+                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                    </div>
+                  ))}
+               </div>
+            </div>
+          )}
+
         </div>
 
-        <div className="grid sm:grid-cols-1 lg:grid-col-3 md:grid-cols-3 p-3 gap-4 container">
-          {imageArray.map((eachImage) => (
-            <img
-              className="rounded-2xl"
-              style={{ width: "400px", height: "300px" }}
-              src={`${BaseUrl}/uploads/${eachImage}`}
-              alt=""
-            />
-          ))}
-        </div>
-
-        <div className="border rounded-2xl border-transparent shadow-2xl text-center  p-5 mt-5 mb-5 container ">
-          <p>{TurfDetail?.description}</p>
-        </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };

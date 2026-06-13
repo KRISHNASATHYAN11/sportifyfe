@@ -30,26 +30,12 @@ const Sidebar = () => {
             <span>
               <FontAwesomeIcon icon={faSearch} />
             </span>{" "}
-            <Link className="text-decoration-none text-white" to={""}>
-              Search
+            <Link className="text-decoration-none text-white" to={"/explore"}>
+              Explore
             </Link>
           </li>
-          <li className="flex items-center gap-3 cursor-pointer  text-white  hover:bg-lime-500 px-2 py-2 rounded-2xl">
-            <span>
-              <FontAwesomeIcon icon={faPlus} />
-            </span>{" "}
-            <Link className="text-decoration-none text-white" to={""}>
-              Create
-            </Link>
-          </li>
-          <li className="flex items-center gap-3 cursor-pointer  text-white  hover:bg-lime-500 px-2 py-2 rounded-2xl">
-            <span>
-              <FontAwesomeIcon icon={faHeart} />
-            </span>{" "}
-            <Link className="text-decoration-none text-white" to={""}>
-              Notifications
-            </Link>
-          </li>
+         
+          
           <li className="flex items-center gap-3 cursor-pointer  text-white  hover:bg-lime-500 px-2 py-2 rounded-2xl">
             <span>
               <FontAwesomeIcon icon={faUser} />

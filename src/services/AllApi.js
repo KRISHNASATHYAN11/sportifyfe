@@ -17,10 +17,11 @@ export const addTurf = async (reqBody, reqHeader) => {
   return await commonApi("post", BaseUrl + "/addTurf", reqBody, reqHeader);
 };
 
-export const getAllTurf = async (reqHeader, search) => {
+// UPDATED: Added page and limit parameters
+export const getAllTurf = async (reqHeader, search, page, limit) => {
   return await commonApi(
     "get",
-    `${BaseUrl}/getAllTurfs?search=${search}`,
+    `${BaseUrl}/getAllTurfs?search=${search}&page=${page}&limit=${limit}`,
     "",
     reqHeader,
   );
@@ -52,10 +53,11 @@ export const addEvent = async (reqBody, reqHeader) => {
   return await commonApi("post", BaseUrl + "/addEvent", reqBody, reqHeader);
 };
 
-export const getAllEvent = async (reqHeader, search) => {
+// ... keep your other functions unchanged ...
+export const getAllEvent = async (reqHeader, search, page, limit) => {
   return await commonApi(
     "get",
-    `${BaseUrl}/getAllEvents?search=${search}`,
+    `${BaseUrl}/getAllEvents?search=${search}&page=${page}&limit=${limit}`,
     "",
     reqHeader,
   );
@@ -79,11 +81,11 @@ export const getAllUsers = async (reqHeader) => {
 };
 
 export const updateFollow = async (id, reqHeader) => {
-  return await commonApi("put", `${BaseUrl}/${id}/follow`, "", reqHeader);
+  return await commonApi("put", `${BaseUrl}/users/${id}/follow`, {}, reqHeader);
 };
 
 export const updateUnFollow = async (id, reqHeader) => {
-  return await commonApi("put", `${BaseUrl}/${id}/unfollow`, "", reqHeader);
+  return await commonApi("put", `${BaseUrl}/users/${id}/unfollow`, {}, reqHeader);
 };
 
 export const MakeBooking = async (reqBody, reqHeader) => {
@@ -95,14 +97,26 @@ export const MakeEventBooking = async (reqBody, reqHeader) => {
 };
 
 export const createTeam = async (reqBody, reqHeader) => {
-  return await commonApi("post", `${BaseUrl}/create-team`, reqBody, reqHeader);
+  return await commonApi("post", `${BaseUrl}/addTeam`, reqBody, reqHeader);
 };
 
-export const addPost = async (id,reqBody, reqHeader) => {
+export const addPost = async (reqBody, reqHeader) => {
+  return await commonApi("post", `${BaseUrl}/addPost`, reqBody, reqHeader);
+};
+
+export const getIndPost = async (reqHeader) => {
+  return await commonApi("get", `${BaseUrl}/getIndPost`, "", reqHeader);
+};
+
+export const getAllPost = async (reqHeader) => {
+return await commonApi( "get",  `${BaseUrl}/allPost`, "", reqHeader);
+};
+
+export const addTeamMember = async (reqBody, reqHeader) => {
   return await commonApi(
     "post",
-    `${BaseUrl}/${id}/addPost`,
+    `${BaseUrl}/addTeamMember`,
     reqBody,
-    reqHeader,
+    reqHeader
   );
 };

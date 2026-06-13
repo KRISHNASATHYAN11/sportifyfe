@@ -18,19 +18,28 @@ import {
   faStickyNote,
 } from "@fortawesome/free-solid-svg-icons";
 import { BaseUrl } from "../services/BaseURL";
-import { addPost, getAllUsers, updateFollow, updateUnFollow } from "../services/AllApi";
+import {
+  addPost,
+  getAllUsers,
+  getIndPost,
+  updateFollow,
+  updateUnFollow,
+} from "../services/AllApi";
 import toast from "react-hot-toast";
+
 // import { Card } from "flowbite-react";
 // import Image from "next/image";
 
 const Profile = () => {
   const [userData, setUserData] = useState({});
-  const [allUser, setAllUser] = useState({});
-  const [openModal, setOpenModal] = useState(true);
+  const [allUser, setAllUser] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [posts, setPosts] = useState([]);
+
   const navigate = useNavigate();
 
   const [preview, setPreview] = useState(
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQhSnEWozdEy0uvh4J_OavlWNk1QRZoduBrQ&s",
+    "https://images.icon-icons.com/3361/PNG/512/multimedia_communication_image_placeholder_photography_landscape_image_comics_picture_photo_gallery_image_icon_210828.png",
   );
 
   const [postData, setPostData] = useState({
@@ -40,10 +49,14 @@ const Profile = () => {
 
   useEffect(() => {
     loadProfileData();
-    getUserData();
-    handleFollow();
-    handleUnFollow();
   }, []);
+
+  useEffect(() => {
+    if (userData?._id) {
+      getUserData();
+      getMyPosts();
+    }
+  }, [userData]);
 
   const loadProfileData = () => {
     let userDetails = localStorage.getItem("user");
@@ -127,15 +140,41 @@ const Profile = () => {
         reqBody.append(key, postData[key]);
       }
 
-      const apiResponse = await addPost(id,reqBody, header);
+      const apiResponse = await addPost(reqBody, header);
 
       if (apiResponse.status === 201) {
         toast.success("Post Added Successfully");
-        navigate("/profile");
+
+        // reset form
+        setPostData({ caption: "", postImage: "" });
+        setPreview(
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQhSnEWozdEy0uvh4J_OavlWNk1QRZoduBrQ&s",
+        );
+
+        setOpenModal(false);
+        getMyPosts();
       }
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong while adding post");
+    }
+  };
+
+  const getMyPosts = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      const apiResponse = await getIndPost(headers);
+
+      if (apiResponse.status == 200) {
+        setPosts(apiResponse.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -150,7 +189,7 @@ const Profile = () => {
               src={
                 userData.profilePic
                   ? `${BaseUrl}/uploads/${userData.profilePic}`
-                  : "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"
+                  : "https://static.vecteezy.com/system/resources/previews/013/042/571/non_2x/default-avatar-profile-icon-social-media-user-photo-in-flat-style-vector.jpg"
               }
               className="w-36 h-36 rounded-full object-cover"
               alt="profile"
@@ -201,16 +240,64 @@ const Profile = () => {
               <div>
                 <p className="text-green-500 text-sm">Followers</p>
                 <p className="text-2xl font-bold">
-                  {userData?.followers?.length || 0}
+                  {userData.followers?.length || 0}
                 </p>
               </div>
               <div>
                 <p className="text-green-500 text-sm">Following</p>
                 <p className="text-2xl font-bold">
-                  {userData?.following?.length || 0}
+                  {userData.following?.length || 0}
                 </p>
               </div>
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            {posts?.length === 0 ? (
+              <p> No posts yet. Start sharing your sports moments!</p>
+            ) : (
+              posts.map((post) => (
+                <div
+                  key={post._id}
+                  className="bg-stone-900 border border-stone-700 rounded-xl shadow-lg hover:shadow-lime-500/20 transition duration-300 overflow-hidden"
+                >
+                  
+                  <div className="h-60 overflow-hidden p-2">
+                   <div className="flex justify-start ms-2">
+                     <img
+                      src={
+                        post.userId?.profilePic
+                          ? `${BaseUrl}/uploads/${post.userId.profilePic}`
+                          : "https://static.vecteezy.com/system/resources/previews/013/042/571/non_2x/default-avatar-profile-icon-social-media-user-photo-in-flat-style-vector.jpg"
+                      }
+                      alt="user"
+                      className="w-10 h-10 rounded-full object-cover mx-2"
+                    />
+
+                    <p className="text-white font-semibold text-lg">
+                      {post.userId?.userName}
+                    </p>
+                   </div>
+                    <img
+                      src={`${BaseUrl}/uploads/${post.postImage}`}
+                      alt="post"
+                      className="w-full h-full object-cover rounded hover:scale-105 transition duration-300"
+                    />
+                  </div>
+
+                  {/* Post Content */}
+                  <div className="p-4">
+                    <p className="text-stone-300 text-sm mt-2">
+                      {post.caption}
+                    </p>
+
+                    <p className="text-stone-500 text-xs mt-3">
+                      {new Date(post.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
           {/* suggested player */}
@@ -242,17 +329,17 @@ const Profile = () => {
                       <p className="text-sm text-white">{eachUser.sport}</p>
 
                       <div className="mt-4 flex space-x-3">
-                        {userData.followers?.includes(userData?._id) ? (
+                        {eachUser.followers?.includes(userData?._id) ? (
                           <button
-                            onClick={() => handleUnFollow(userData._id)}
-                            className="bg-lime-400 text-white px-6 py-2 rounded  hover:bg-lime-700"
+                            onClick={() => handleUnFollow(eachUser._id)}
+                            className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-700"
                           >
                             Unfollow
                           </button>
                         ) : (
                           <button
-                            onClick={() => handleUnFollow(userData._id)}
-                            className="bg-lime-400 text-white px-6 py-2 rounded  hover:bg-lime-700"
+                            onClick={() => handleFollow(eachUser._id)}
+                            className="bg-lime-500 text-white px-6 py-2 rounded hover:bg-lime-700"
                           >
                             Follow
                           </button>
@@ -424,7 +511,7 @@ const Profile = () => {
                 name=""
                 id="image"
               />
-              <img src={preview} alt="" />
+              <img className="h-50 w-50" src={preview} alt="" />
             </label>
             <textarea
               value={postData.caption}
@@ -434,9 +521,7 @@ const Profile = () => {
               rows={5}
               className="border w-full"
               placeholder="Description"
-              place
-              type="text"
-            />
+            ></textarea>
           </div>
         </ModalBody>
         <ModalFooter>

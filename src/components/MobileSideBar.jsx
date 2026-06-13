@@ -14,8 +14,8 @@ const MobileSideBar = () => {
   return (
     <>
 
-       <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t py-2">
-          <div class="flex justify-around text-2xl">
+       <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t py-2">
+          <div className="flex justify-around text-2xl">
             <span className="cursor-pointer"><FontAwesomeIcon icon={faHome}/></span>
             <span className="cursor-pointer"><FontAwesomeIcon icon={faSearch}/></span>
             <span className="cursor-pointer"><FontAwesomeIcon icon={faPlus}/></span>

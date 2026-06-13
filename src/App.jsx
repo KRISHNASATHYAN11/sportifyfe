@@ -24,6 +24,7 @@ import BookingFailure from "./components/BookingFailure";
 import Eventbookingfailure from "./components/Eventbookingfailure";
 import Eventbookingsuccess from "./components/Eventbookingsuccess";
 import Team from "./components/Team";
+import Explore from "./pages/Explore";
 
 function App() {
 
@@ -64,6 +65,8 @@ function App() {
         <Route path="/eventbookingfailure" element={<Eventbookingfailure/>}/>
         <Route path="/eventbookingsuccess" element={<Eventbookingsuccess/>}/>
         <Route path="/team" element={<Team/>}/>
+        <Route path="/explore" element={<Explore/>}/>
+        
 
 
 

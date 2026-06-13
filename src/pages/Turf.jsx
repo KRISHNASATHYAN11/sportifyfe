@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Card } from "flowbite-react";
-import { Button } from "flowbite-react";
-import { MdSportsSoccer } from "react-icons/md";
-import { FiMapPin } from "react-icons/fi";
 import Header from "../components/Header";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Footer from "../components/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocation, faSignIn } from "@fortawesome/free-solid-svg-icons";
+import { faLocation, faSignIn, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { getAllTurf } from "../services/AllApi";
-import { Badge } from "flowbite-react";
 import toast from "react-hot-toast";
 
 const Turf = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [turfData, setTurfData] = useState([]);
+  const [dummyTurf, setDummyTurf] = useState([]);
   const [sportsAvailability, setSportsAvailability] = useState([]);
 
-  const [dummyTurf, setDummyTurf] = useState([]);
+  // Pagination States
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit] = useState(8); // Items per page
 
   const [search, setSearch] = useState("");
 
@@ -27,37 +26,38 @@ const Turf = () => {
     let token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
-      getTurfData();
+      getTurfData(currentPage); // Pass current page
     }
-  }, [search]);
+  }, [search, currentPage]); // Re-fetch when page or search changes
 
-  const getTurfData = async () => {
+  const getTurfData = async (page = 1) => {
     try {
       let token = localStorage.getItem("token");
       let reqHeader = {
         Authorization: `Bearer ${token}`,
       };
-      let apiResponse = await getAllTurf(reqHeader, search);
+      
+      // Pass page and limit to API
+      let apiResponse = await getAllTurf(reqHeader, search, page, limit);
+      
       if (apiResponse.status == 200) {
         setTurfData(apiResponse.data.AllTurfs);
         setDummyTurf(apiResponse.data.AllTurfs);
+        setTotalPages(apiResponse.data.totalPages); // Get total pages from backend
+
+        // Handle Sports Availability Filter logic (Client side as originally implemented)
         let sportsArray = apiResponse.data.AllTurfs.map(
           (eachTurf) => eachTurf.sportsAvailability,
         );
-        setSportsAvailability(sportsArray);
-        // to avaoid adding same sports availability again and again
-
         let dummySport = [];
         sportsArray.forEach((eachSportsAvailabilty) => {
           if (!dummySport.includes(eachSportsAvailabilty)) {
-            console.log(eachSportsAvailabilty);
-
             dummySport.push(eachSportsAvailabilty);
           }
         });
         setSportsAvailability(dummySport);
       } else {
-        toast.error(apiResponse.response.data.message);
+        toast.error(apiResponse.response?.data?.message || "Error fetching turfs");
         navigate("/login");
       }
     } catch (error) {
@@ -66,168 +66,233 @@ const Turf = () => {
   };
 
   const filterTurfs = (sportsAvailability) => {
+    // Client-side filter resets pagination to page 1
+    setCurrentPage(1);
     let filteredTurfs = dummyTurf.filter(
       (eachTurf) => eachTurf.sportsAvailability == sportsAvailability,
     );
     setTurfData(filteredTurfs);
+    // Note: When filtering client-side, totalPages might not match actual DB pages.
+    // For this UI, we keep it simple or ideally this should be a backend query param.
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
     <>
-      <Header />
-      {isLoggedIn ? (
-        <>
-          <div className="container-fluid bg-black">
-            <div className=" container">
-              <div className="flex justify-center  ">
-                <input
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder=" Search By Location"
-                  className="bg-white border-2 p-2 placeholder:ps-2 rounded-l-2xl w-96 mt-4"
-                  type="text"
-                />
-                <button className="bg-green-500 mt-4 font-bold border-2 border-black rounded-l-2xl focus:ring-1 focus:ring-emerald-300 text-white px-4">
-                  Search
-                </button>
+      <style>
+        {`
+          @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+          }
+          .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+          }
+        `}
+      </style>
+
+      <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-[#4ade80] selection:text-black">
+        
+        <Header />
+
+        {isLoggedIn ? (
+          <div className="container mx-auto px-4 py-10 relative z-10">
+            
+            {/* Hero Section & Search */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+                Find Your Perfect Turf
+              </h1>
+              
+              {/* Search Bar */}
+              <div className="max-w-2xl mx-auto relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#4ade80] to-blue-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                <div className="relative flex bg-[#0a0a0a] rounded-full p-1 border border-white/10">
+                  <input
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search by location..."
+                    className="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder-gray-500 px-6 py-3 rounded-full outline-none"
+                    type="text"
+                  />
+                  <button className="bg-[#4ade80] text-black font-bold px-8 py-3 rounded-full hover:bg-[#22c55e] transition-colors flex items-center gap-2">
+                    Search
+                  </button>
+                </div>
               </div>
 
-              <div className="container  hidden md:flex md:justify-center md:items-center ">
-                {sportsAvailability?.length > 0 && (
-                  <div className="flex justify-center items-center">
-                    <motion.div
-                      whileHover={{
-                        y: -10,
-                        scale: 1.05,
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 10,
-                      }}
-                    >
-                      <button
-                        onClick={getTurfData}
-                        className=" bg-linear-to-r from-green-500 via-green-900 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-base text-sm px-4 py-2.5 text-center leading-5 mx-2 mt-3 text-white"
-                      >
-                        All
-                      </button>
-                    </motion.div>
-                    {sportsAvailability?.map((eachSportsAvailabilty, index) => (
-                      <motion.div
-                        whileHover={{
-                          y: -10,
-                          scale: 1.05,
-                        }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 200,
-                          damping: 10,
-                        }}
-                        onClick={() => filterTurfs(eachSportsAvailabilty)}
-                        className=" bg-linear-to-r from-green-500 via-green-900 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-base text-sm px-4 py-2.5 text-center leading-5 mx-2 mt-3 "
-                      >
-                        <input hidden type="radio" name="" id={index} />
-                        <label className="text-white">
-                          {eachSportsAvailabilty}
-                        </label>
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
+              {/* Filter Buttons (Client Side) */}
+              <div className="flex flex-wrap justify-center gap-3 mt-8">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => { setCurrentPage(1); getTurfData(1); }} // Reset to page 1 and fetch all
+                  className="px-6 py-2 rounded-full border border-[#4ade80]/30 text-[#4ade80] hover:bg-[#4ade80] hover:text-black transition-all text-sm font-bold uppercase tracking-wider"
+                >
+                  All
+                </motion.button>
+                {sportsAvailability?.length > 0 && sportsAvailability?.map((sport, index) => (
+                  <motion.button
+                    key={index}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => filterTurfs(sport)}
+                    className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:border-white/50 hover:text-white transition-all text-sm font-bold uppercase tracking-wider"
+                  >
+                    {sport}
+                  </motion.button>
+                ))}
               </div>
             </div>
 
-            <h2 className="mx-3 mt-3 text-white">Recommended For You</h2>
-            <div className="p-4 bg-stone-800">
-              {turfData?.length > 0 && (
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-2 p-4">
-                  {turfData?.map((eachTurf) => (
-                    <motion.div
-                      whileHover={{
-                        y: -10,
-                        scale: 1.05,
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 10,
-                      }}
-                      className="w-fit relative"
-                    >
-                      <Card
-                        className="max-w-xs bg-black p-2 h-full object-cover object-center"
-                        imgAlt=""
-                        imgSrc={eachTurf.imageURL}
-                        style={{
-                          width: "full",
-                          height: "full",
-                          objectFit: "cover",
-                          objectPosition: "center",
-                        }}
-                      >
-                        <h5 className="text-2xl font-bold tracking-tight text-white ">
-                          {eachTurf.turfName}
-                        </h5>
-                        <div>
-                          <Badge
-                            className="inline-block"
-                            color="success"
-                            size="sm"
-                          >
+            {/* Turf Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+              {turfData?.length > 0 ? (
+                turfData?.map((eachTurf) => (
+                  <motion.div
+                    key={eachTurf._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="group relative"
+                  >
+                    <div className="glass-card rounded-3xl overflow-hidden hover:border-[#4ade80]/50 transition-all duration-500 h-full flex flex-col">
+                      
+                      {/* Image Section */}
+                      <div className="relative h-48 overflow-hidden">
+                        <img
+                          src={eachTurf.imageURL}
+                          alt={eachTurf.turfName}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700"
+                        />
+                        <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                          <span className="text-xs font-bold text-[#4ade80] uppercase">
                             {eachTurf.sportsAvailability}
-                          </Badge>
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          <h3 className="text-xl font-bold text-white mb-2 line-clamp-1">
+                            {eachTurf.turfName}
+                          </h3>
+                          <div className="flex items-center text-gray-400 text-sm mb-3">
+                            <FontAwesomeIcon icon={faLocation} className="mr-2 text-[#4ade80]"/>
+                            <span className="truncate">{eachTurf.location}</span>
+                          </div>
+                          <div className="flex items-center justify-between mt-4">
+                            <div className="text-2xl font-bold text-[#4ade80]">
+                              ₹{eachTurf.pricePerHour}
+                              <span className="text-xs text-gray-500 font-normal">/hr</span>
+                            </div>
+                            <div className="text-xs text-gray-500 border border-white/10 px-2 py-1 rounded">
+                              Max {eachTurf.maxPlayers}
+                            </div>
+                          </div>
                         </div>
 
-                        <div className="text-white text-justify">
-                          <h6>
-                            <FontAwesomeIcon icon={faLocation} />
-                            {eachTurf.location}
-                          </h6>
-                        </div>
-
-                        <div className="text-center flex justify-center  items-center">
+                        {/* Button */}
+                        <div className="mt-5">
                           <Link
                             to={`/${eachTurf._id}/viewsingle`}
-                            className="font-bold text-decoration-none"
+                            className="block w-full text-center bg-white/5 hover:bg-[#4ade80] hover:text-black border border-white/10 hover:border-[#4ade80] text-white font-bold py-3 rounded-xl transition-all duration-300"
                           >
-                            <span className="text-white bg-linear-to-r from-green-500 via-green-900 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-base text-sm px-4 py-2.5 text-center leading-5">
-                              Book Now
-                            </span>
+                            Book Now
                           </Link>
                         </div>
-                      </Card>
-                    </motion.div>
-                  ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="col-span-4 text-center py-20 text-gray-500">
+                  <p className="text-xl">No turfs found matching your criteria.</p>
                 </div>
               )}
             </div>
 
-            <div className="flex justify-center items-center bg-stone-800 p-3">
-              <Link className="text-white bg-linear-to-r from-green-500 via-green-900 to-green-900 rounded-pill hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  rounded-base text-sm px-4 py-2.5 text-center leading-5 font-bold text-decoration-none">
-                View More
+            {/* Pagination Component */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-8">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
+                    currentPage === 1 
+                    ? 'border-white/10 text-gray-600 cursor-not-allowed' 
+                    : 'border-white/20 text-white hover:bg-white/10 hover:border-[#4ade80] hover:text-[#4ade80]'
+                  }`}
+                >
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </button>
+
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handlePageChange(i + 1)}
+                    className={`w-10 h-10 rounded-full font-bold transition-all ${
+                      currentPage === i + 1
+                        ? 'bg-[#4ade80] text-black shadow-[0_0_15px_rgba(74,222,128,0.5)]'
+                        : 'bg-transparent border border-white/10 text-gray-400 hover:border-white/50 hover:text-white'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
+                    currentPage === totalPages 
+                    ? 'border-white/10 text-gray-600 cursor-not-allowed' 
+                    : 'border-white/20 text-white hover:bg-white/10 hover:border-[#4ade80] hover:text-[#4ade80]'
+                  }`}
+                >
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </div>
+            )}
+
+          </div>
+        ) : (
+          // Not Logged In View
+          <div className="flex flex-col justify-center items-center h-[70vh] gap-6 px-4 text-center">
+            <div className="relative">
+               <div className="absolute inset-0 bg-[#4ade80]/20 blur-3xl rounded-full"></div>
+               <img
+                  className="w-64 md:w-96 rounded-2xl relative z-10 border border-white/10"
+                  src="https://i.pinimg.com/originals/72/19/90/721990480d1f30f45c862cecad967e2d.gif"
+                  alt="Login Required"
+               />
+            </div>
+            <div>
+              <h2 className="text-3xl font-bold text-white mb-2">
+                Turfs are listed for <span className="text-[#4ade80]">Logged In Users</span>
+              </h2>
+              <Link 
+                to={"/login"} 
+                className="inline-flex items-center gap-2 text-lg text-gray-300 hover:text-[#4ade80] transition-colors font-semibold"
+              >
+                <FontAwesomeIcon icon={faSignIn} /> Click here to Login
               </Link>
             </div>
           </div>
-        </>
-      ) : (
-        <div className="flex justify-center items-center gap-3 p-3">
-          <img
-            className="w-50 mt-3 m-3 rounded-4xl "
-            src="https://i.pinimg.com/originals/72/19/90/721990480d1f30f45c862cecad967e2d.gif"
-            alt=""
-          />
-          <h2 className=" text-green-700 text-center">
-            Turfs are only Listed for{" "}
-            <span className="text-green-600"> Logined Users</span> <br />
-            <span className="text-xl">
-              <Link to={"/login"}>
-                <FontAwesomeIcon icon={faSignIn} /> Click here to Login
-              </Link>
-            </span>
-          </h2>
-        </div>
-      )}
-      <Footer />
+        )}
+        
+        <Footer />
+      </div>
     </>
   );
 };
